@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+@layer base {
+    :root {
+        --color-primary: "3FA7D6";
+        --color-on-primary: "black";
+        --color-background: "EBF5EE";
+        --color-on-background: "black";
+        --color-surface: "";
+        --color-on-surface: "";
+    }
+    [data-theme="dark"] {
+        --color-primary: "3FA7D6";
+        --color-on-primary: "black";
+        --color-background: "585563";
+        --color-on-background: "white";
+        --color-surface: "";
+        --color-on-surface: "";
+    }
+}
