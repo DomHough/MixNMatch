@@ -1,0 +1,17 @@
+#root {
+    width: 100dvw;
+    min-height: 100dvh;
+}
+
+/* Base: no outlines at all */
+.ProseMirror {
+    outline: none;
+    color: var(--color-on-surface);
+}
+
+/* When ProseMirror adds this class on focus, keep it visually the same */
+.ProseMirror.ProseMirror-focused {
+    outline: none !important;
+    box-shadow: none !important;   /* in case your UI theme adds a ring */
+    border-color: inherit !important;
+}
