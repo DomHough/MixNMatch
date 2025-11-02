@@ -4,9 +4,9 @@ on:
     branches:
       - main
 env:
-  TF_CLOUD_ORGANIZATION: ""
+  TF_CLOUD_ORGANIZATION: "domhough"
   TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
-  TF_WORKSPACE: ""
+  TF_WORKSPACE: "mixnmatch"
   CONFIG_DIRECTORY: "./"
 
 jobs:
