@@ -1,20 +1,47 @@
 @import "tailwindcss";
 
+
 @layer base {
-    :root {
-        --color-primary: "3FA7D6";
-        --color-on-primary: "black";
-        --color-background: "EBF5EE";
-        --color-on-background: "black";
-        --color-surface: "";
-        --color-on-surface: "";
+    * {
+        margin: 0;
+        padding: 0;
+        border: none;
+        outline: none;
+        box-sizing: border-box;
+        text-decoration: none;
+        list-style: none;
     }
-    [data-theme="dark"] {
-        --color-primary: "3FA7D6";
-        --color-on-primary: "black";
-        --color-background: "585563";
-        --color-on-background: "white";
-        --color-surface: "";
-        --color-on-surface: "";
+}
+
+/* Default light theme */
+:root[data-theme="light"] {
+    --color-primary: #3FA7D6;
+    --color-primary-hover: #2A93C3;
+    --color-primary-active: #227AA1;
+    --color-on-primary: black;
+
+    --color-background: #EBF5EE;
+    --color-background-hover: #D0E7D7;
+    --color-background-active: #B5DAC0;
+    --color-on-background: black;
+
+    --color-surface: #DBE5DE;
+    --color-on-surface: black;
+}
+
+/* System dark mode preference (only applies when no data-theme is set) */
+:root[data-theme="dark"] {
+    @theme {
+        --color-primary: #3FA7D6;
+        --color-primary-hover: #2A93C3;
+        --color-primary-active: #227AA1;
+        --color-on-primary: black;
+
+        --color-background: #585563;
+        --color-background-hover: #44424D;
+        --color-background-active: #312F37;
+        --color-on-background: white;
+        --color-surface: #484553;
+        --color-on-surface: white;
     }
 }
