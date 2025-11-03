@@ -11,7 +11,7 @@ env:
 
 jobs:
   terraform:
-    if: github.repository != 'domhough/mixnmatch'
+    if: github.repository != 'DomHough/MixNMatch'
     name: "Terraform Apply"
     runs-on: ubuntu-latest
     permissions:
