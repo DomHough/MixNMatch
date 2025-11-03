@@ -9,7 +9,6 @@ env:
 
 jobs:
   terraform:
-    if: github.repository != 'DomHough/MixNMatch'
     name: "Terraform Plan"
     runs-on: ubuntu-latest
     permissions:
