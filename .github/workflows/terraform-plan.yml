@@ -3,7 +3,7 @@ on:
   pull_request:
 env:
   TF_CLOUD_ORGANIZATION: "domhough"
-  TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
+  TF_API_TOKEN: ${{ secrets.TF_API_KEY }}
   TF_WORKSPACE: "mixnmatch"
   CONFIG_DIRECTORY: "./"
 
