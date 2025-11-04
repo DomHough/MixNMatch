@@ -3,7 +3,6 @@ import { ReactNodeViewRenderer } from '@tiptap/react'
 import {createDocumentStore, type SwappableId, type VariantId} from "./DocumentStore.ts";
 import { SwappableView } from './components/SwappableView.tsx';
 
-type Listener = () => void
 type DocumentStore = ReturnType<typeof createDocumentStore>
 
 export interface SwappableOpts {

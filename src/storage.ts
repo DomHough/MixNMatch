@@ -37,7 +37,7 @@ export function loadDocumentsFromStorage(): Record<string, DocumentType> {
     // Convert ISO strings back to Date objects
     return Object.entries(parsed).reduce((acc, [id, doc]) => {
       acc[id] = {
-        ...doc,
+        ...(doc as unknown as DocumentType),
         modified: new Date(doc.modified)
       }
       return acc
