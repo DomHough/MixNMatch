@@ -15,12 +15,20 @@ function shallowEqualObj(a: Record<string, any>, b: Record<string, any>) {
 
 export function SwappableView(props: ReactNodeViewProps) {
   const { node } = props
-  const { store, getDocId, onClick } = (props.editor.storage.swappable ??
-    props.extension.options) as {
+  const swappable = (props.editor.storage as unknown as {
+    swappable?: {
+      store: DocumentStore
+      getDocId: () => string | null
+      onClick?: (id: string | null, variantId: string | null) => void
+    }
+  }).swappable
+
+  const { store, getDocId, onClick } = swappable ??
+  (props.extension.options as {
     store: DocumentStore
     getDocId: () => string | null
     onClick?: (id: string | null, variantId: string | null) => void
-  }
+  })
 
   const { id, variantId } = node.attrs as { id: string; variantId?: string }
 

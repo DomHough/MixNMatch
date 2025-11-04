@@ -81,12 +81,9 @@ function App() {
 
   // Track save status
   const [saveStatus, setSaveStatus] = useState<'saved' | 'saving'>('saved')
-  const [lastChangeTime, setLastChangeTime] = useState<number>(Date.now())
-
 
 
   const [editingSwappableId, setEditingSwappableId] = useState<string>("");
-  const [editingVariantId, setEditingVariantId] = useState<string>("");
   const editingSwappable = activeDoc?.swappables[editingSwappableId];
 
 
@@ -103,9 +100,8 @@ function App() {
       Swappable.configure({
         store,
         getDocId: () => activeDocId,
-        onClick: (id, variantId) => {
+        onClick: (id: string) => {
           setEditingSwappableId(id || "");
-          setEditingVariantId(variantId || "");
         }
       })
     ],
@@ -142,7 +138,6 @@ function App() {
 
   useEffect(() => {
     setEditingSwappableId("")
-    setEditingVariantId("")
   }, [activeDocId])
 
   const newSwappable = () => {
@@ -256,7 +251,6 @@ function App() {
 
     // Close the editing panel
     setEditingSwappableId("")
-    setEditingVariantId("")
   }
 
   const newDocument = () => {
@@ -533,7 +527,6 @@ function App() {
   useEffect(() => {
     const unsubscribe = store.subscribe(() => {
       setSaveStatus('saving')
-      setLastChangeTime(Date.now())
     })
     return () => {
       unsubscribe()
