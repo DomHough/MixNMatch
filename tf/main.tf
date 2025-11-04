@@ -1,15 +1,20 @@
-resource "aws_s3_bucket" "site" {
-  bucket = "mixnmatch-bucket"
+resource "aws_s3_bucket" "mixnmatch_site" {
+  bucket = "mixnmatch-site"
   force_destroy = true
+}
 
-  website {
-    index_document = "index.html"
-    error_document = "error.html"
+resource "aws_s3_bucket_website_configuration" "mixnmatch_site" {
+  bucket = aws_s3_bucket.mixnmatch_site.id
+  index_document {
+    suffix = "index.html"
+  }
+  error_document {
+    key = "index.html"
   }
 }
 
-resource "aws_s3_bucket_public_access_block" "site" {
-  bucket                  = aws_s3_bucket.site.id
+resource "aws_s3_bucket_public_access_block" "mixnmatch_site" {
+  bucket                  = aws_s3_bucket.mixnmatch_site.id
   block_public_acls       = false
   block_public_policy     = false
   ignore_public_acls      = false
@@ -18,23 +23,24 @@ resource "aws_s3_bucket_public_access_block" "site" {
 
 data "aws_iam_policy_document" "public_read" {
   statement {
-    sid = "PublicReadGetObject"
+    sid = "PublicReadForWebsite"
+    effect = "Allow"
     principals {
-      type        = "AWS"
+      type        = "*"
       identifiers = ["*"]
     }
     actions   = ["s3:GetObject"]
-    resources = ["${aws_s3_bucket.site.arn}/*"]
+    resources = ["${aws_s3_bucket.mixnmatch_site.arn}/*"]
   }
 }
 
 resource "aws_s3_bucket_policy" "public_policy" {
-  bucket = aws_s3_bucket.site.id
+  bucket = aws_s3_bucket.mixnmatch_site.id
   policy = data.aws_iam_policy_document.public_read.json
 }
 
 resource "aws_s3_bucket_ownership_controls" "this" {
-  bucket = aws_s3_bucket.site.id
+  bucket = aws_s3_bucket.mixnmatch_site.id
   rule {
     object_ownership = "BucketOwnerEnforced"
   }
