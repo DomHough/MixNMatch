@@ -25,6 +25,7 @@ import DropdownButton from "./components/DropdownButton.tsx";
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { saveDocumentsToStorage, loadDocumentsFromStorage } from './storage.ts';
+import { generateShareableURL, getSharedDocumentFromURL, clearSharedDocumentFromURL, type ShareableDocumentData } from './shareUtils.ts';
 
 
 
@@ -40,6 +41,17 @@ function App() {
   const getActiveDocId = () => activeDocId
   const activeDoc   = useActiveDocument(store, getActiveDocId)
   const documents   = useAllDocuments(store)
+
+  // State for shared document import dialog
+  const [sharedDocData, setSharedDocData] = useState<ShareableDocumentData | null>(null)
+
+  // Check for shared document in URL on mount
+  useEffect(() => {
+    const sharedDoc = getSharedDocumentFromURL()
+    if (sharedDoc) {
+      setSharedDocData(sharedDoc)
+    }
+  }, [])
 
   // Theme state: 'light', 'dark', or 'system' (follows prefers-color-scheme)
   const [theme, setTheme] = useState<'light' | 'dark' | 'system'>(() => {
@@ -539,8 +551,66 @@ function App() {
     setSwappableActiveVariants(getSwappableActiveVariants())
   }
 
+  const importSharedDocument = () => {
+    if (!sharedDocData) return
+
+    // Create a new document with the shared data
+    const newDoc = store.createDocument({
+      name: sharedDocData.name,
+      content: sharedDocData.content,
+      swappables: sharedDocData.swappables
+    })
+
+    // Set as active document
+    setActiveDocId(newDoc.id)
+
+    // Clear the shared document from URL and state
+    clearSharedDocumentFromURL()
+    setSharedDocData(null)
+  }
+
+  const dismissSharedDocument = () => {
+    clearSharedDocumentFromURL()
+    setSharedDocData(null)
+  }
+
+  const copyShareableLink = async () => {
+    if (!activeDoc) return
+
+    try {
+      const shareURL = generateShareableURL(activeDoc)
+      await navigator.clipboard.writeText(shareURL)
+      alert('Shareable link copied to clipboard!')
+    } catch (error) {
+      console.error('Failed to copy link:', error)
+      // Fallback: show the link in a prompt
+      const shareURL = generateShareableURL(activeDoc)
+      prompt('Copy this shareable link:', shareURL)
+    }
+  }
+
   return (
     <div className="flex flex-row min-h-dvh bg-background">
+      {/* Shared Document Import Dialog */}
+      {sharedDocData && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-surface p-6 rounded-xl shadow-lg max-w-md">
+            <h2 className="text-xl font-semibold text-on-surface mb-4">Import Shared Document</h2>
+            <p className="text-on-surface mb-4">
+              You have a shared document link. Would you like to import "{sharedDocData.name}" into your workspace?
+            </p>
+            <div className="flex gap-2 justify-end">
+              <Button variant="background" onClick={dismissSharedDocument}>
+                Dismiss
+              </Button>
+              <Button variant="primary" onClick={importSharedDocument}>
+                Import Document
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="flex flex-col bg-surface p-4 gap-2 border-r-1 border-on-background">
         <div className="flex flex-row items-center text-3xl">
           <MdOutlineArticle className="text-on-surface"/>
@@ -597,7 +667,7 @@ function App() {
                 items={[
                   {
                     label: "Copy Shareable Link",
-                    onClick: () => console.log("Copy Shareable Link")
+                    onClick: copyShareableLink
                   }
                 ]}
                 variant="primary"
