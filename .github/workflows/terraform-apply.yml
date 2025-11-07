@@ -3,6 +3,9 @@ on:
   push:
     branches:
       - master
+    paths:
+      - 'tf/**'
+      - '.github/workflows/terraform-apply.yml'
 env:
   TF_CLOUD_ORGANIZATION: "domhough"
   TF_API_TOKEN: ${{ secrets.TF_API_KEY }}
